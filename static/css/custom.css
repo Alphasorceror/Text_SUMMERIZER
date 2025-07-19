@@ -1,0 +1,176 @@
+/* Custom styles to enhance the default Bootstrap theme */
+
+:root {
+    --gradient-primary: linear-gradient(45deg, #8E2DE2, #4A00E0);
+    --gradient-secondary: linear-gradient(45deg, #6157ff, #74febd);
+    --gradient-info: linear-gradient(45deg, #11998e, #38ef7d);
+    --gradient-danger: linear-gradient(45deg, #ee0979, #ff6a00);
+    --gradient-success: linear-gradient(45deg, #02AABD, #00CDAC);
+    --accent-color: #7c4dff;
+    --highlight-color: #9d50bb;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #131722;
+    background-image: 
+        radial-gradient(circle at 25% 25%, rgba(79, 79, 255, 0.05) 0%, transparent 25%),
+        radial-gradient(circle at 75% 75%, rgba(138, 43, 226, 0.05) 0%, transparent 25%);
+}
+
+/* Colorful navbar */
+.navbar {
+    background-image: var(--gradient-primary) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* Make textarea more readable and colorful */
+textarea.form-control {
+    font-size: 1rem;
+    line-height: 1.5;
+    border: 2px solid #2d2d39;
+    background-color: #1b1b26;
+    transition: all 0.3s ease;
+}
+
+textarea.form-control:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 0.25rem rgba(124, 77, 255, 0.25);
+}
+
+/* Style for the summary result */
+#summary-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    border-left: 4px solid var(--accent-color);
+    padding-left: 1rem;
+    min-height: 100px;
+    background-color: #1e1e2d;
+    border-radius: 6px;
+}
+
+/* Animation for the loading spinner */
+.spinner-border {
+    animation-duration: 1s;
+}
+
+/* Better hover effect for buttons */
+.btn-primary {
+    background-image: var(--gradient-primary);
+    border: none;
+}
+
+.btn-secondary {
+    background-color: #2d2d3a;
+    border: none;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s;
+}
+
+/* Custom card styling */
+.card {
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    border: none;
+    background-color: #212134;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+    background-color: #262640;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 1.25rem 1.5rem;
+}
+
+.card-body {
+    background-color: #212134;
+}
+
+/* Glowing headings */
+h3, h4 {
+    color: white;
+    text-shadow: 0 0 10px rgba(124, 77, 255, 0.4);
+}
+
+/* Custom alert styling */
+.alert-info {
+    background-color: rgba(30, 64, 175, 0.2);
+    border-left: 4px solid #3b82f6;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+}
+
+.alert-danger {
+    background-color: rgba(185, 28, 28, 0.2);
+    border-left: 4px solid #ef4444;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+}
+
+/* Fancy range slider */
+.form-range::-webkit-slider-thumb {
+    background: var(--accent-color);
+}
+
+.form-range::-moz-range-thumb {
+    background: var(--accent-color);
+}
+
+.form-range::-webkit-slider-runnable-track {
+    background-color: #3d3d56;
+}
+
+.form-range::-moz-range-track {
+    background-color: #3d3d56;
+}
+
+/* Footer styling */
+footer {
+    margin-top: auto;
+    background-image: var(--gradient-primary);
+    background-size: 200% 200%;
+    animation: gradientAnimation 5s ease infinite;
+}
+
+/* Animated gradient background */
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1.25rem;
+    }
+    
+    #summary-text {
+        font-size: 1rem;
+    }
+}

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Summarizer</title>
+    <!-- Bootstrap CSS (Replit dark theme) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap-dark.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-file-alt me-2"></i>Text Summarizer Pro
+            </a>
+        </div>
+    </nav>
+
+    <div class="container mb-5">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="card-title mb-0">
+                            <i class="fas fa-compress-alt me-2"></i>Text Summarization Tool
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info" role="alert">
+                            <i class="fas fa-info-circle me-2"></i>Paste your text below and adjust the summary length to generate a concise summary using NLP techniques.
+                        </div>
+                        
+                        <form id="summarize-form">
+                            <div class="mb-3">
+                                <label for="text-input" class="form-label">Text to Summarize</label>
+                                <textarea class="form-control" id="text-input" rows="10" 
+                                    placeholder="Paste or type your text here (minimum 10 characters)"></textarea>
+                                <div class="form-text" id="text-counter">0 characters</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="ratio-range" class="form-label">Summary Length: <span id="ratio-value">30%</span></label>
+                                <input type="range" class="form-range" id="ratio-range" min="10" max="90" value="30">
+                                <div class="form-text">Adjust the slider to control the summary length</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="language-select" class="form-label">Language</label>
+                                <select class="form-select" id="language-select">
+                                    <option value="auto" selected>Auto Detect</option>
+                                    <option value="english">English</option>
+                                    <option value="hindi">Hindi</option>
+                                </select>
+                                <div class="form-text">Select the language of your text or use auto-detection</div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="button" id="clear-btn" class="btn btn-secondary">
+                                    <i class="fas fa-eraser me-1"></i>Clear
+                                </button>
+                                <button type="submit" id="summarize-btn" class="btn btn-primary" style="background-image: var(--gradient-primary);">
+                                    <i class="fas fa-magic me-1"></i>Summarize
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div id="result-container" class="card mb-4 d-none">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title mb-0">
+                            <i class="fas fa-file-alt me-2"></i>Summary Result
+                        </h4>
+                        <button id="copy-btn" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-copy me-1"></i>Copy
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="summary-text" class="p-3 rounded"></div>
+                    </div>
+                </div>
+                
+                <div id="error-container" class="alert alert-danger d-none" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <span id="error-message"></span>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">
+                            <i class="fas fa-info-circle me-2"></i>About This Tool
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <p>This text summarization tool uses Natural Language Processing (NLP) techniques to create concise summaries of longer texts.</p>
+                        <h5 class="mt-3">How it works:</h5>
+                        <ul class="list-group list-group-flush mt-2 mb-3" style="background: transparent !important;">
+                            <li class="list-group-item" style="background: transparent; border-color: rgba(255,255,255,0.1);">
+                                <i class="fas fa-brain me-2" style="color: var(--accent-color)"></i>
+                                The tool analyzes your text to identify important sentences
+                            </li>
+                            <li class="list-group-item" style="background: transparent; border-color: rgba(255,255,255,0.1);">
+                                <i class="fas fa-chart-bar me-2" style="color: var(--accent-color)"></i>
+                                It uses frequency analysis to determine sentence importance
+                            </li>
+                            <li class="list-group-item" style="background: transparent; border-color: rgba(255,255,255,0.1);">
+                                <i class="fas fa-filter me-2" style="color: var(--accent-color)"></i>
+                                The most important sentences are extracted to form a summary
+                            </li>
+                            <li class="list-group-item" style="background: transparent; border-color: rgba(255,255,255,0.1);">
+                                <i class="fas fa-sliders-h me-2" style="color: var(--accent-color)"></i>
+                                You can control the summary length with the ratio slider
+                            </li>
+                            <li class="list-group-item" style="background: transparent; border-color: rgba(255,255,255,0.1);">
+                                <i class="fas fa-language me-2" style="color: var(--accent-color)"></i>
+                                Supports both English and Hindi text summarization
+                            </li>
+                        </ul>
+                        <div class="alert" style="background-image: var(--gradient-secondary); border: none; color: #212134; font-weight: 500;">
+                            <i class="fas fa-lightbulb me-2"></i>
+                            Perfect for summarizing articles, research papers, news, or any long-form content!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center text-white py-4 mt-auto">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h5 class="mb-3"><i class="fas fa-rocket me-2"></i>Text Summarizer Pro</h5>
+                    <p class="small">Simplifying complex text with advanced NLP technology</p>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h5 class="mb-3"><i class="fas fa-tools me-2"></i>Features</h5>
+                    <ul class="list-unstyled small">
+                        <li>Fast AI-powered summarization</li>
+                        <li>Adjustable summary length</li>
+                        <li>Multiple language support (EN, HI)</li>
+                        <li>No registration required</li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="mb-3"><i class="fas fa-star me-2"></i>Benefits</h5>
+                    <ul class="list-unstyled small">
+                        <li>Save time reading long documents</li>
+                        <li>Extract key information quickly</li>
+                        <li>Improve research efficiency</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-top border-secondary pt-3 mt-3">
+                <p class="mb-0">© 2023 Text Summarizer Pro - AI-Powered Text Summarization Tool</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading spinner modal -->
+    <div class="modal fade" id="loading-modal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark">
+                <div class="modal-body text-center p-5">
+                    <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <h5>Generating Summary...</h5>
+                    <p class="text-muted">Please wait while we process your text.</p>
+                    <button type="button" class="btn btn-outline-secondary mt-3" onclick="document.querySelector('#loading-modal').classList.remove('show'); document.body.classList.remove('modal-open'); document.body.style.overflow = ''; document.body.style.paddingRight = ''; document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());">
+                        <i class="fas fa-times me-1"></i>Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
